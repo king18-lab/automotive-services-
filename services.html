@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Stackly Automotive | Precision Engineering</title>
+
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* ===== AUTOMOTIVE LOADER (spinning wheel & piston) ===== */
+#page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.loader-container {
+    text-align: center;
+}
+
+.automotive-loader {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.spinning-wheel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 5px solid #d6f736;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.piston {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 40px;
+    background: #d6f736;
+    border-radius: 4px;
+    animation: pistonMove 0.8s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pistonMove {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+    50% { transform: translateX(-50%) translateY(-20px); opacity: 1; }
+}
+
+.loader-text {
+    color: #d6f736;
+    margin-top: 40px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 85px;
+    background: #000;
+    border-bottom: 2px solid #d6f736;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+    filter: brightness(0) invert(1);
+}
+
+/* CIRCULAR NAV LINKS */
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-circle {
+    width: 52px;
+    height: 52px;
+    background: #111;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    border: 1px solid #333;
+}
+
+.nav-circle i {
+    font-size: 24px;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.nav-links a span {
+    font-size: 12px;
+    margin-top: 6px;
+    color: #aaa;
+    font-weight: 500;
+}
+
+.nav-links a:hover .nav-circle {
+    background: #d6f736;
+    border-color: #d6f736;
+    transform: scale(1.1);
+}
+
+.nav-links a:hover .nav-circle i {
+    color: #000;
+}
+
+.nav-links a:hover span {
+    color: #d6f736;
+}
+
+/* BUTTONS */
+.nav-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.login {
+    background: transparent;
+    border: 1px solid #d6f736;
+    color: #d6f736;
+    padding: 8px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.login:hover {
+    background: #d6f736;
+    color: #000;
+}
+
+.start {
+    background: #d6f736;
+    border: none;
+    color: #000;
+    padding: 8px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.start:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* HAMBURGER */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger span {
+    width: 26px;
+    height: 3px;
+    background: #d6f736;
+    display: block;
+}
+
+/* MOBILE MENU */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: #000;
+    padding: 25px 22px;
+    transition: 0.4s ease;
+    z-index: 2000;
+    overflow-y: auto;
+    border-left: 2px solid #d6f736;
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    background: none;
+    border: none;
+    color: #d6f736;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.mobile-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.mobile-links a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid #222;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.mobile-links a:hover {
+    color: #d6f736;
+    padding-left: 10px;
+}
+
+.mobile-links a i {
+    width: 30px;
+    font-size: 20px;
+    color: #d6f736;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+    z-index: 1500;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media(max-width:900px) {
+    .nav-links, .nav-buttons {
+        display: none;
+    }
+    .hamburger {
+        display: flex;
+    }
+    .navbar {
+        padding: 0 20px;
+    }
+    .logo img {
+        width: 120px;
+    }
+}
+
+/* ===== HERO SECTION (VIDEO) ===== */
+.hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+.hero-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.65);
+    z-index: -1;
+}
+
+.hero-container {
+    width: 90%;
+    max-width: 1300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-text {
+    max-width: 700px;
+}
+
+.hero-text h1 {
+    font-size: 60px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.hero-text h1 span {
+    color: #d6f736;
+}
+
+.hero-text p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #ccc;
+}
+
+.hero-btn {
+    padding: 14px 35px;
+    border: 2px solid #d6f736;
+    background: transparent;
+    color: #d6f736;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    transition: 0.3s;
+    border-radius: 50px;
+}
+
+.hero-btn:hover {
+    background: #d6f736;
+    color: #000;
+}
+
+.video-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: #d6f736;
+    font-size: 18px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 30px;
+    z-index: 5;
+}
+
+@media(max-width:900px) {
+    .hero-text h1 {
+        font-size: 38px;
+    }
+    .hero-text p {
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER (automotive themed) -->
+<div id="page-loader">
+    <div class="loader-container">
+        <div class="automotive-loader">
+            <div class="spinning-wheel"></div>
+            <div class="piston"></div>
+        </div>
+        <div class="loader-text">Stackly Automotive · Precision Loading</div>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">
+   <a href="index.html">     <img src="stacklylogo (1).webp" alt="Stackly Automotive">
+    </div></a>
+    <nav class="nav-links">
+        <a href="index.html">
+            <div class="nav-circle"><i class="fas fa-home"></i></div>
+            <span>Home</span>
+        </a>
+        <a href="services.html">
+            <div class="nav-circle"><i class="fas fa-wrench"></i></div>
+            <span>Services</span>
+        </a>
+        <a href="features.html">
+            <div class="nav-circle"><i class="fas fa-microchip"></i></div>
+            <span>Features</span>
+        </a>
+        <a href="about.html">
+            <div class="nav-circle"><i class="fas fa-users"></i></div>
+            <span>About</span>
+        </a>
+        <a href="contact.html">
+            <div class="nav-circle"><i class="fas fa-envelope"></i></div>
+            <span>Contact</span>
+        </a>
+    </nav>
+    <div class="nav-buttons">
+        <a href="login.html"><button class="login">Login</button></a>
+        <a href="getstarted.html"><button class="start">Get Started</button></a>
+    </div>
+    <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-top">
+        <div class="logo"><img src="stacklylogo (1).webp" height="35" alt="logo"></div>
+        <button class="close" id="closeMenu">✕</button>
+    </div>
+    <div class="mobile-buttons">
+        <a href="login.html"><button class="login">Login</button></a>
+        <a href="getstarted.html"><button class="start">Get Started</button></a>
+    </div>
+    <nav class="mobile-links">
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="services.html"><i class="fas fa-wrench"></i> Services</a>
+        <a href="features.html"><i class="fas fa-microchip"></i> Features</a>
+        <a href="about.html"><i class="fas fa-users"></i> About</a>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+    </nav>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<!-- HERO SECTION WITH BACKGROUND VIDEO -->
+<section class="hero">
+    <video autoplay muted loop id="heroVideo">
+        <source src="177404-857376786_medium.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="hero-overlay"></div>
+    <button class="video-btn" id="videoBtn">⏸</button>
+    <div class="hero-container">
+        <div class="hero-text">
+            <h1>Stackly <span>Automotive</span><br>Services</h1>
+            <p>Best Price</p>
+            <a href="404.html"><button class="hero-btn">Service now →</button></a>
+        </div>
+    </div>
+</section>
+
+<script>
+// Page loader (hide after 2 seconds)
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        document.getElementById("page-loader").style.display = "none";
+    }, 2000);
+});
+
+// Mobile menu
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobileMenu");
+const closeMenu = document.getElementById("closeMenu");
+const overlay = document.getElementById("overlay");
+
+hamburger.onclick = () => {
+    mobileMenu.classList.add("active");
+    overlay.classList.add("active");
+};
+closeMenu.onclick = () => {
+    mobileMenu.classList.remove("active");
+    overlay.classList.remove("active");
+};
+overlay.onclick = () => {
+    mobileMenu.classList.remove("active");
+    overlay.classList.remove("active");
+};
+
+// Video control (pause/play)
+const heroVideo = document.getElementById("heroVideo");
+const videoBtn = document.getElementById("videoBtn");
+videoBtn.onclick = () => {
+    if (heroVideo.paused) {
+        heroVideo.play();
+        videoBtn.innerHTML = "⏸";
+    } else {
+        heroVideo.pause();
+        videoBtn.innerHTML = "▶";
+    }
+};
+</script>
+</body>
+</html>
+
+  </div>
+</section>
+<style>
+#pgwCarServiceHeroSection {
+  width: 100%;
+  min-height: 100vh;
+  background: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 30px;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#pgwCarServiceWrapper {
+  width: 100%;
+  max-width: 1350px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+#pgwCarImagePanel {
+  position: relative;
+  width: 52%;
+  min-height: 500px;
+  background: #ffffff;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+}
+
+#pgwCarImagePanel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78%;
+  height: 100%;
+  background: #072d49;
+  clip-path: polygon(0 0, 82% 0, 100% 100%, 0% 100%);
+  z-index: 1;
+}
+
+#pgwCarTopBanner {
+  position: absolute;
+  top: 35px;
+  left: 40px;
+  z-index: 3;
+  max-width: 420px;
+}
+
+#pgwCarBannerText {
+  margin: 0;
+  color: #ffffff;
+  font-size: 2rem;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+#pgwCarHashTag {
+  color: #d6f736;
+}
+
+#pgwCarMainImage {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  object-fit: cover;
+}
+
+#pgwCarContentPanel {
+  width: 48%;
+}
+
+#pgwCarMainHeading {
+  margin: 0 0 30px;
+  color: #073b63;
+  font-size: 4.5rem;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+#pgwCarDescriptionText {
+  margin: 0 0 35px;
+  color: #222;
+  font-size: 1.45rem;
+  line-height: 1.8;
+  max-width: 620px;
+}
+
+#pgwCarButtonRow {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+#pgwFindWorkshopBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 34px;
+  background: #d6f736;
+  color: #072d49;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: all 0.35s ease;
+  box-shadow: 0 12px 25px rgba(214, 247, 54, 0.35);
+}
+
+#pgwFindWorkshopBtn:hover {
+  background: #072d49;
+  color: #d6f736;
+  transform: translateY(-4px);
+}
+
+#pgwKnowMoreBtn {
+  color: #073b63;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+#pgwKnowMoreBtn:hover {
+  color: #d6f736;
+}
+
+#pgwArrowIcon {
+  font-size: 1.4rem;
+  transition: transform 0.3s ease;
+}
+
+#pgwKnowMoreBtn:hover #pgwArrowIcon {
+  transform: translateX(6px);
+}
+
+@media (max-width: 1100px) {
+  #pgwCarServiceWrapper {
+    flex-direction: column;
+  }
+
+  #pgwCarImagePanel,
+  #pgwCarContentPanel {
+    width: 100%;
+  }
+
+  #pgwCarMainHeading {
+    font-size: 3.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #pgwCarServiceHeroSection {
+    padding: 30px 18px;
+  }
+
+  #pgwCarImagePanel {
+    min-height: 380px;
+  }
+
+  #pgwCarTopBanner {
+    left: 22px;
+    top: 24px;
+    max-width: 260px;
+  }
+
+  #pgwCarBannerText {
+    font-size: 1.2rem;
+  }
+
+  #pgwCarMainHeading {
+    font-size: 2.5rem;
+  }
+
+  #pgwCarDescriptionText {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  #pgwCarButtonRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #pgwFindWorkshopBtn,
+  #pgwKnowMoreBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+<section id="pgwServicesMainSection">
+  <div id="pgwServicesContainer">
+
+    <h2 id="pgwServicesTitle">Our Services</h2>
+    <p id="pgwServicesSubtitle">
+      Visit our nearest workshop for high-quality service
+    </p>
+
+    <div id="pgwServicesCardWrapper">
+
+      <a href="404.html" id="pgwServiceCardInspection" class="pgwServiceCommonCard">
+        <div class="pgwServiceIcon">🛠️</div>
+        <h3 class="pgwServiceHeading">Inspection &amp; Checks</h3>
+        <span class="pgwServiceArrow">→</span>
+      </a>
+
+      <a href="404.html" id="pgwServiceCardRepair" class="pgwServiceCommonCard">
+        <div class="pgwServiceIcon">🔧</div>
+        <h3 class="pgwServiceHeading">Car Repair Service</h3>
+        <span class="pgwServiceArrow">→</span>
+      </a>
+
+      <a href="404.html" id="pgwServiceCardTyre" class="pgwServiceCommonCard">
+        <div class="pgwServiceIcon">🛞</div>
+        <h3 class="pgwServiceHeading">Tyre Service</h3>
+        <span class="pgwServiceArrow">→</span>
+      </a>
+
+      <a href="404.html" id="pgwServiceCardElectronic" class="pgwServiceCommonCard">
+        <div class="pgwServiceIcon">🔋</div>
+        <h3 class="pgwServiceHeading">Electronic Services</h3>
+        <span class="pgwServiceArrow">→</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+<style>
+
+#pgwServicesMainSection {
+  width: 100%;
+  background: #ffffff;
+  padding: 90px 40px;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#pgwServicesContainer {
+  max-width: 1300px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#pgwServicesTitle {
+  margin: 0;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #000000;
+}
+
+#pgwServicesSubtitle {
+  margin: 24px 0 55px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+#pgwServicesCardWrapper {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.pgwServiceCommonCard {
+  background: #ffffff;
+  border: 3px solid #000000;
+  min-height: 260px;
+  padding: 38px 25px;
+  text-decoration: none;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s ease;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.08);
+}
+
+.pgwServiceCommonCard:hover {
+  background: #d6f736;
+  border-color: #d6f736;
+  transform: translateY(-10px);
+  box-shadow: 0 22px 45px rgba(214,247,54,0.45);
+}
+
+.pgwServiceIcon {
+  font-size: 4.4rem;
+  color: #000000;
+  margin-bottom: 28px;
+  transition: all 0.3s ease;
+}
+
+.pgwServiceHeading {
+  margin: 0;
+  color: #000000;
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.pgwServiceArrow {
+  margin-top: 28px;
+  font-size: 2rem;
+  color: #000000;
+  transition: transform 0.3s ease;
+}
+
+.pgwServiceCommonCard:hover .pgwServiceArrow {
+  transform: translateX(8px);
+}
+
+@media (max-width: 1100px) {
+  #pgwServicesCardWrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  #pgwServicesMainSection {
+    padding: 70px 20px;
+  }
+
+  #pgwServicesTitle {
+    font-size: 2.8rem;
+  }
+
+  #pgwServicesSubtitle {
+    font-size: 1.3rem;
+    margin-bottom: 35px;
+  }
+
+  #pgwServicesCardWrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .pgwServiceCommonCard {
+    min-height: 220px;
+  }
+
+  .pgwServiceHeading {
+    font-size: 1.5rem;
+  }
+}
+</style>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ===== COMMON SECTION STYLES ===== */
+        .section {
+            padding: 80px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-title span {
+            color: #d6f736;
+        }
+
+        /* ===== SERVICES SECTION ===== */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .service-card {
+            background: #0f111a;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.3s;
+            border: 1px solid #1a1e2a;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: #d6f736;
+            box-shadow: 0 10px 30px rgba(214, 247, 54, 0.2);
+        }
+        .service-img {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+        }
+        .service-info {
+            padding: 1.5rem;
+        }
+        .service-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .service-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #d6f736;
+            margin: 0.5rem 0;
+        }
+        .service-info p {
+            color: #aaa;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .btn-service {
+            background: transparent;
+            border: 2px solid #d6f736;
+            color: #d6f736;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .btn-service:hover {
+            background: #d6f736;
+            color: #000;
+        }
+
+        /* ===== STATS SECTION (LIVE NUMBERS) ===== */
+        .stats-section {
+            background: #0f111a;
+            padding: 60px 8%;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        .stat-item {
+            padding: 1rem;
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #d6f736;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== EXPERTS SECTION ===== */
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .expert-card {
+            background: #0f111a;
+            border-radius: 20px;
+            overflow: hidden;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid #1a1e2a;
+        }
+        .expert-card:hover {
+            transform: translateY(-5px);
+            border-color: #d6f736;
+        }
+        .expert-img {
+            height: 260px;
+            background-size: cover;
+            background-position: center;
+        }
+        .expert-info {
+            padding: 1.5rem;
+        }
+        .expert-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        .expert-role {
+            color: #d6f736;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .expert-info p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* ===== CITIES SECTION ===== */
+        .cities-section {
+            background: #0f111a;
+            text-align: center;
+            padding: 60px 8%;
+        }
+        .cities-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .city-item {
+            background: #1a1e2a;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+        }
+        .city-item i {
+            color: #d6f736;
+            font-size: 1.2rem;
+        }
+        .city-item:hover {
+            background: #d6f736;
+            color: #000;
+            transform: translateY(-3px);
+        }
+        .city-item:hover i {
+            color: #000;
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .section {
+                padding: 50px 5%;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .cities-grid {
+                gap: 1rem;
+            }
+            .city-item {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SERVICES SECTION -->
+    <section class="section">
+        <h2 class="section-title reveal">Our <span>Premium Services</span></h2>
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-img" style="background-image: url('Blog.webp');"></div>
+                <div class="service-info">
+                    <h3>AI Engine Diagnostics</h3>
+                    <div class="service-price">₹2,999</div>
+                    <p>Advanced computer scanning, error code analysis, and predictive maintenance recommendations.</p>
+                    <button class="btn-service" onclick="window.location.href='404.html'">Book Now →</button>
+                </div>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-img" style="background-image: url('homecarimg.webp');"></div>
+                <div class="service-info">
+                    <h3>Performance Tuning</h3>
+                    <div class="service-price">₹12,999</div>
+                    <p>ECU remapping, exhaust optimization, dyno testing for maximum horsepower and torque.</p>
+                    <button class="btn-service" onclick="window.location.href='404.html'">Book Now →</button>
+                </div>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-img" style="background-image: url('ultrapro.webp');"></div>
+                <div class="service-info">
+                    <h3>EV/Hybrid Service</h3>
+                    <div class="service-price">₹4,999</div>
+                    <p>Battery diagnostics, charging system check, and high-voltage safety inspection.</p>
+                    <button class="btn-service" onclick="window.location.href='404.html'">Book Now →</button>
+                </div>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-img" style="background-image: url('framebody.webp');"></div>
+                <div class="service-info">
+                    <h3>Brake & Suspension</h3>
+                    <div class="service-price">₹5,499</div>
+                    <p>Complete brake pad replacement, rotor resurfacing, and suspension alignment.</p>
+                    <button class="btn-service" onclick="window.location.href='404.html'">Book Now →</button>
+                </div>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-img" style="background-image: url('regenerative.webp');"></div>
+                <div class="service-info">
+                    <h3>AC & Climate Control</h3>
+                    <div class="service-price">₹2,499</div>
+                    <p>AC recharge, leak detection, heater repair, and cabin filter replacement.</p>
+                    <button class="btn-service" onclick="window.location.href='404.html'">Book Now →</button>
+                </div>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-img" style="background-image: url('paimting.webp');"></div>
+                <div class="service-info">
+                    <h3>Full Vehicle Inspection</h3>
+                    <div class="service-price">₹1,999</div>
+                    <p>150-point comprehensive check with detailed digital report.</p>
+                    <button class="btn-service" onclick="window.location.href='404.html'">Book Now →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE NUMBERS STATS SECTION -->
+    <section class="stats-section">
+        <h2 class="section-title reveal">Our <span>Impact</span> in Numbers</h2>
+        <div class="stats-grid">
+            <div class="stat-item reveal">
+                <div class="stat-number" id="stat1">0</div>
+                <div class="stat-label">Vehicles Serviced</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" id="stat2">0</div>
+                <div class="stat-label">Happy Customers</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" id="stat3">0</div>
+                <div class="stat-label">Expert Technicians</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" id="stat4">0</div>
+                <div class="stat-label">Service Centers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERT TEAM SECTION -->
+    <section class="section">
+        <h2 class="section-title reveal">Meet Our <span>Master Technicians</span></h2>
+        <div class="experts-grid">
+            <div class="expert-card reveal">
+                <div class="expert-img" style="background-image: url('Hr.webp');"></div>
+                <div class="expert-info">
+                    <h3>Arjun Mehta</h3>
+                    <div class="expert-role">Chief Engineer</div>
+                    <p>15+ years in performance tuning and engine diagnostics</p>
+                </div>
+            </div>
+            <div class="expert-card reveal">
+                <div class="expert-img" style="background-image: url('hr2.webp');"></div>
+                <div class="expert-info">
+                    <h3>Priya Sharma</h3>
+                    <div class="expert-role">EV Specialist</div>
+                    <p>Certified electric vehicle technician, 8+ years experience</p>
+                </div>
+            </div>
+            <div class="expert-card reveal">
+                <div class="expert-img" style="background-image: url('hr11.webp');"></div>
+                <div class="expert-info">
+                    <h3>Rahul Nair</h3>
+                    <div class="expert-role">AI Diagnostics Lead</div>
+                    <p>Expert in predictive maintenance and machine learning models</p>
+                </div>
+            </div>
+            <div class="expert-card reveal">
+                <div class="expert-img" style="background-image: url('hr23.webp');"></div>
+                <div class="expert-info">
+                    <h3>Neha Gupta</h3>
+                    <div class="expert-role">Brake & Suspension Expert</div>
+                    <p>10+ years in chassis and safety systems</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICE CENTER CITIES SECTION -->
+    <section class="cities-section">
+        <h2 class="section-title reveal">Our <span>Service Centers</span></h2>
+        <div class="cities-grid">
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Mumbai</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Delhi NCR</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Bangalore</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Pune</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Chennai</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Hyderabad</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Kolkata</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Ahmedabad</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Jaipur</a>
+            <a href="404.html" class="city-item reveal"><i class="fas fa-map-marker-alt"></i> Lucknow</a>
+        </div>
+    </section>
+
+    <script>
+        // Scroll Reveal
+        const reveals = document.querySelectorAll('.reveal');
+        function checkReveal() {
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const visible = 120;
+                if (elementTop < windowHeight - visible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkReveal);
+        window.addEventListener('load', checkReveal);
+
+        // Live Counter Animation
+        const counters = [
+            { element: document.getElementById('stat1'), target: 25000, current: 0 },
+            { element: document.getElementById('stat2'), target: 24500, current: 0 },
+            { element: document.getElementById('stat3'), target: 150, current: 0 },
+            { element: document.getElementById('stat4'), target: 45, current: 0 }
+        ];
+
+        function animateCounters() {
+            counters.forEach(counter => {
+                if (counter.current < counter.target) {
+                    const increment = Math.ceil(counter.target / 80);
+                    counter.current = Math.min(counter.current + increment, counter.target);
+                    counter.element.innerText = counter.current.toLocaleString() + (counter.target > 1000 ? '+' : '');
+                    setTimeout(animateCounters, 20);
+                } else {
+                    counter.element.innerText = counter.target.toLocaleString() + (counter.target > 1000 ? '+' : '');
+                }
+            });
+        }
+
+        // Start counters when stats section becomes visible
+        let statsAnimated = false;
+        const statsSection = document.querySelector('.stats-section');
+        function checkStats() {
+            if (!statsAnimated && statsSection) {
+                const rect = statsSection.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    statsAnimated = true;
+                    animateCounters();
+                }
+            }
+        }
+        window.addEventListener('scroll', checkStats);
+        window.addEventListener('load', checkStats);
+    </script>
+</body>
+</html>
+<!-- ========== STACKLY AUTOMOTIVE FOOTER ========== -->
+<style>
+/* Footer Styles */
+.footer {
+    background: #0a0a0a;
+    padding: 60px 8% 30px;
+    border-top: 2px solid #d6f736;
+    font-family: 'Inter', sans-serif;
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.footer-col h3 {
+    color: #d6f736;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.footer-col p {
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.footer-logo {
+    width: 140px;
+    margin-bottom: 15px;
+    filter: brightness(0) invert(1);
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.footer-links a:hover {
+    color: #d6f736;
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.social-icons a {
+    width: 36px;
+    height: 36px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.social-icons a:hover {
+    background: #d6f736;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+.subscribe-form {
+    margin-top: 10px;
+}
+
+.subscribe-form input {
+    width: 100%;
+    padding: 12px 15px;
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 40px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.subscribe-form input:focus {
+    border-color: #d6f736;
+}
+
+.subscribe-form button {
+    width: 100%;
+    padding: 12px;
+    background: #d6f736;
+    border: none;
+    color: #000;
+    font-weight: 700;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.subscribe-form button:hover {
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 40px;
+    margin-top: 50px;
+    border-top: 1px solid #222;
+    color: #666;
+    font-size: 13px;
+}
+
+/* Mobile view: text align start (left) */
+@media (max-width: 900px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        text-align: left;
+    }
+    
+    .footer-col {
+        text-align: left;
+    }
+    
+    .social-icons {
+        justify-content: flex-start;
+    }
+    
+    .subscribe-form input,
+    .subscribe-form button {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 40px 5% 25px;
+    }
+    
+    .footer-logo {
+        width: 120px;
+    }
+}
+</style>
+
+<footer class="footer">
+    <div class="footer-container">
+        <!-- Column 1: Logo & About -->
+        <div class="footer-col">
+            <img src="stacklylogo (1).webp" alt="Stackly Automotive" class="footer-logo">
+            <p>AI-powered automotive solutions for precision diagnostics, performance tuning, and 24/7 roadside assistance.</p>
+            <div class="social-icons">
+                <a href="404.html"><i class="fab fa-twitter"></i></a>
+                <a href="404.html"><i class="fab fa-facebook-f"></i></a>
+                <a href="404.html"><i class="fab fa-linkedin-in"></i></a>
+                <a href="404.html"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <!-- Column 2: Quick Links -->
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 3: Services -->
+        <div class="footer-col">
+            <h3>Our Services</h3>
+            <ul class="footer-links">
+                <li><a href="404.html">AI Diagnostics</a></li>
+                <li><a href="404.html">Performance Tuning</a></li>
+                <li><a href="404.html">EV/Hybrid Repair</a></li>
+                <li><a href="404.html">Fleet Management</a></li>
+                <li><a href="404.html">24/7 Roadside</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 4: Subscribe -->
+        <div class="footer-col">
+            <h3>Stay Updated</h3>
+            <p>Get the latest automotive tech insights and offers.</p>
+            <form class="subscribe-form" action="404.html" method="get">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe →</button>
+            </form>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2026 Stackly Automotive. All rights reserved. | Drive with precision.
+    </div>
+</footer>

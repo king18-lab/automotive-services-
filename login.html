@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackly Automotive - Login</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", -apple-system, sans-serif;
+        }
+
+        :root {
+            --auto-primary: #d6f736;
+            --auto-dark: #b0d42a;
+            --auto-light: #e5ff8a;
+            --dark-bg: #0a0c12;
+            --dark-card: #0f111a;
+            --dark-light: #1a1e2a;
+            --white: #ffffff;
+            --gray-light: #e0e0e0;
+            --gray-medium: #9e9e9e;
+            --border-light: #2a2a2a;
+        }
+
+        .auto-login-wrapper {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .auto-login-image-panel {
+            width: 50%;
+            background-image: linear-gradient(rgba(10, 12, 18, 0.85), rgba(132, 134, 119, 0.7)),
+                url('ultrapro.webp');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auto-login-image-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(214, 247, 54, 0.1) 0px,
+                rgba(214, 247, 54, 0.1) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            pointer-events: none;
+        }
+
+        .auto-login-logo {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auto-login-logo span {
+            color: var(--auto-primary);
+        }
+
+        .auto-login-subtitle {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+        }
+
+        .auto-login-heading {
+            font-size: 32px;
+            font-weight: 600;
+            max-width: 450px;
+            line-height: 1.4;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .auto-login-features {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auto-login-feature {
+            text-align: center;
+        }
+
+        .auto-login-feature i {
+            width: 32px;
+            height: 32px;
+            color: var(--auto-primary);
+            margin-bottom: 10px;
+        }
+
+        .auto-login-feature p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .auto-login-form-panel {
+            width: 50%;
+            background-color: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        .auto-login-form-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--auto-primary), var(--auto-light), var(--auto-primary));
+        }
+
+        .auto-login-form-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auto-login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auto-login-header h1 {
+            font-size: 32px;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .auto-login-header p {
+            color: var(--gray-medium);
+        }
+
+        .auto-login-header a {
+            color: var(--auto-primary) !important;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auto-login-header a:hover {
+            text-decoration: underline;
+        }
+
+        .auto-login-form-group {
+            margin-bottom: 20px;
+        }
+
+        .auto-login-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--white);
+        }
+
+        .auto-login-input,
+        .auto-login-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--dark-light);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background-color: var(--dark-card);
+            color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .auto-login-input:focus,
+        .auto-login-select:focus {
+            border-color: var(--auto-primary);
+            box-shadow: 0 0 0 3px rgba(214, 247, 54, 0.2);
+        }
+
+        .auto-login-input::placeholder {
+            color: var(--gray-medium);
+        }
+
+        .auto-login-select option {
+            background-color: var(--dark-card);
+            color: var(--white);
+        }
+
+        .auto-login-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 24px;
+            color: var(--gray-medium);
+        }
+
+        .auto-login-meta label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .auto-login-meta input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--auto-primary);
+        }
+
+        .auto-login-meta a {
+            color: var(--auto-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auto-login-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .auto-login-btn-submit {
+            position: relative;
+            width: 100%;
+            height: 54px;
+            background-color: var(--auto-primary);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .auto-login-btn-submit::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: var(--auto-dark);
+            z-index: -1;
+            transition: height 0.4s ease;
+        }
+
+        .auto-login-btn-submit:hover::before {
+            height: 100%;
+        }
+
+        .auto-login-btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(214, 247, 54, 0.4);
+        }
+
+        .auto-login-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 30px 0;
+            color: var(--gray-medium);
+            font-size: 13px;
+        }
+
+        .auto-login-divider::before,
+        .auto-login-divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--dark-light);
+        }
+
+        .auto-login-divider:not(:empty)::before {
+            margin-right: 15px;
+        }
+
+        .auto-login-divider:not(:empty)::after {
+            margin-left: 15px;
+        }
+
+        .auto-login-social-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .auto-login-social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border: 2px solid var(--dark-light);
+            border-radius: 8px;
+            background: var(--dark-card);
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            gap: 10px;
+            color: var(--white);
+        }
+
+        .auto-login-social-btn:hover {
+            background: var(--auto-primary);
+            color: var(--dark-bg);
+            border-color: var(--auto-primary);
+            transform: translateY(-2px);
+        }
+
+        .auto-login-social-btn i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .auto-login-back-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 18px;
+    background: #ffffff;
+    color: #111;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.auto-login-back-btn:hover {
+    background: #f8f9fa;
+    color: #000;
+    border-color: #d1d5db;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.auto-login-back-btn:active {
+    transform: scale(0.98);
+}
+
+.auto-login-back-btn i {
+    margin-right: 8px;
+    color: #2563eb;
+}
+
+        @media (max-width: 992px) {
+            .auto-login-wrapper {
+                flex-direction: column;
+            }
+            .auto-login-image-panel {
+                width: 100%;
+                min-height: 300px;
+                padding: 30px 20px;
+            }
+            .auto-login-form-panel {
+                width: 100%;
+                padding: 40px 20px;
+            }
+            .auto-login-features {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .auto-login-heading {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auto-login-social-grid {
+                grid-template-columns: 1fr;
+            }
+            .auto-login-logo {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auto-login-wrapper">
+        <section class="auto-login-image-panel">
+            <div class="auto-login-logo">STACKLY<span>AUTO</span></div>
+            <div class="auto-login-subtitle">Drive Smarter, Drive Better</div>
+            <h2 class="auto-login-heading">
+                Precision diagnostics, performance tuning, and trusted automotive care.
+            </h2>
+            
+            <div class="auto-login-features">
+                <div class="auto-login-feature">
+                    <i data-lucide="car"></i>
+                    <p>1000+ Repairs</p>
+                </div>
+                <div class="auto-login-feature">
+                    <i data-lucide="wrench"></i>
+                    <p>Expert Mechanics</p>
+                </div>
+                <div class="auto-login-feature">
+                    <i data-lucide="shield-check"></i>
+                    <p>24/7 Support</p>
+                </div>
+            </div>
+            
+            <button type="button" class="auto-login-back-btn" onclick="window.location.href = 'index.html'">
+                BACK TO HOME
+            </button>
+        </section>
+
+        <section class="auto-login-form-panel">
+            <div class="auto-login-form-container">
+                <div class="auto-login-header">
+                    <h1>Welcome Back</h1>
+                    <p>
+                        Don't have an account?
+                        <a href="getstart.html">Sign Up</a>
+                    </p>
+                </div>
+
+                <form id="login-form">
+                    <div class="auto-login-form-group">
+                        <label class="auto-login-label">Login as</label>
+                        <select class="auto-login-select" id="role" required>
+                            <option value="workshop">Workshop / Mechanic</option>
+                            <option value="customer" selected>Customer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="auto-login-form-group">
+                        <label class="auto-login-label">Email Address</label>
+                        <input
+                            type="email"
+                            class="auto-login-input"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="off"
+                            required
+                        />
+                    </div>
+                    
+                    <div class="auto-login-form-group">
+                        <label class="auto-login-label">Password</label>
+                        <input
+                            type="password"
+                            class="auto-login-input"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="new-password"
+                            required
+                        />
+                    </div>
+
+                    <div class="auto-login-meta">
+                        <label>
+                            <input type="checkbox" /> Remember me
+                        </label>
+                        <a href="404.html">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="auto-login-btn-submit">
+                        SIGN IN
+                    </button>
+
+                    <div class="auto-login-divider">Or continue with</div>
+                    
+                    <div class="auto-login-social-grid">
+                        <button type="button" class="auto-login-social-btn" onclick="window.location.href = '404.html'">
+                            <i data-lucide="facebook"></i> Facebook
+                        </button>
+                        <button type="button" class="auto-login-social-btn" onclick="window.location.href = '404.html'">
+                            <i data-lucide="chrome"></i> Google
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        document.getElementById("login-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const role = document.getElementById("role").value;
+
+            // Store user data for dashboard redirection
+            const userData = {
+                name: role === "workshop" ? "Workshop User" : "Customer User",
+                email: email,
+                role: role,
+            };
+
+            localStorage.setItem("auto_user", JSON.stringify(userData));
+
+            if (role === "workshop") {
+                window.location.href = "workshop.html";  // replace with your workshop dashboard
+            } else {
+                window.location.href = "custmor.html";   // replace with your customer dashboard
+            }
+        });
+        
+        window.onload = () => {
+            document.getElementById("login-form").reset();
+        };
+    </script>
+</body>
+</html>
